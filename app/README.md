@@ -1,6 +1,6 @@
 # cdis
 
-> A community driven interactive story
+> Community driven interactive story
 
 ## Build Setup
 
