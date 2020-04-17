@@ -82,7 +82,15 @@ module.exports = {
      */
     extend(_config, _ctx) {},
   },
+  generate: {
+    dir: 'public',
+  },
   serverMiddleware: isServerlessEnvironment
     ? []
-    : ['~/api/user/update-or-create.js'],
+    : [
+        '~/api/user/update-or-create.js',
+        '~/api/story/get-starting-points.js',
+        '~/api/story/get-by-id.js',
+        '~/api/story/save-chapter.js',
+      ],
 };

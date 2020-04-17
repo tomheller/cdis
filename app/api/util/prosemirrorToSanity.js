@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+const nanoid = require('nanoid');
 
 function transformBlock(block) {
   const transformedBlock = {
@@ -36,6 +36,7 @@ function transformBlock(block) {
   return transformedBlock;
 }
 
-export function prosemirrorToSanityBlocks(proseMirrorContent) {
+function prosemirrorToSanityBlocks(proseMirrorContent) {
   return proseMirrorContent.content.map((block) => transformBlock(block));
 }
+module.exports = prosemirrorToSanityBlocks;

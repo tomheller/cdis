@@ -1,20 +1,4 @@
-import { nanoid } from 'nanoid';
-import { prosemirrorToSanityBlocks } from './prosemirrorToSanity';
-const sanityClient = require('@sanity/client');
 const blocksToHtml = require('@sanity/block-content-to-html');
-const { startingPointsQuery, getChapterById } = require('./queries');
-
-// Sanity client initialization
-const client = sanityClient({
-  projectId: 'ozdxyxjq',
-  dataset: 'production',
-  // For now this is injected manually, the whole client
-  // should be moved to serverless functions
-  // based on:
-  // https://dev.to/danielroe/using-serverless-functions-in-nuxt-on-zeit-now-4a98
-  token: window.localStorage.getItem('SANITY_TOKEN'),
-  useCdn: true, // `false` if you want to ensure fresh data
-});
 
 export const state = () => ({
   story: [],
@@ -69,7 +53,10 @@ export const mutations = {
 
 export const actions = {
   async loadEntrypoints({ commit }) {
-    const entryComponents = await client.fetch(startingPointsQuery);
+    const entryComponentsResponse = await this.$axios.get(
+      '/api/story/get-starting-points/',
+    );
+    const entryComponents = entryComponentsResponse.data;
     const entry = entryComponents[0];
     entry.content = blocksToHtml({
       blocks: entry.body,
@@ -88,8 +75,10 @@ export const actions = {
       reference,
     });
 
-    const nextChapter = await client.fetch(getChapterById(reference));
-
+    const nextChapterResponse = await this.$axios.get(
+      `/api/story/get-by-id/${reference}`,
+    );
+    const nextChapter = nextChapterResponse.data;
     nextChapter.content = blocksToHtml({
       blocks: nextChapter.body,
     });
@@ -111,46 +100,29 @@ export const actions = {
     commit('setEditmodeParent', chapterData);
   },
 
-  async saveChapter({ dispatch }, { title, content, parentChapter }) {
-    // Create the chapter
-    const chapter = {
-      _type: 'chapter',
+  async saveChapter(
+    { dispatch, rootState },
+    { title, content, parentChapter },
+  ) {
+    const patchedChapter = await this.$axios.post('/api/story/save-chapter', {
       title,
-      body: prosemirrorToSanityBlocks(content),
-      choices: [],
-    };
-    const sanityChapter = await client.create(chapter);
-
-    // Create the choice
-    const choice = {
-      _type: 'choice',
-      title,
-      continuation: {
-        _type: 'reference',
-        _ref: sanityChapter._id,
-      },
-    };
-    const sanityChoice = await client.create(choice);
-
-    // Add the choice to the chapter being modified.
-    const sanityPatchedChapter = await client
-      .patch(parentChapter._id)
-      .setIfMissing({ choices: [] })
-      .insert('after', 'choices[-1]', [
-        {
-          _key: nanoid(),
-          _ref: sanityChoice._id,
-          _type: 'reference',
-        },
-      ])
-      .commit();
+      content,
+      author: rootState.user.ref,
+      parentChapterId: parentChapter._id,
+    });
 
     await dispatch('cancelEditMode');
-    await dispatch('updateChapter', sanityPatchedChapter._id);
+    console.log('patched', patchedChapter.data);
+    await dispatch('updateChapter', patchedChapter.data._id);
   },
 
   async updateChapter({ commit }, chapterId) {
-    const updatedChapter = await client.fetch(getChapterById(chapterId));
+    console.log('update chapter', chapterId);
+    const updatedChapterResponse = await this.$axios.get(
+      `/api/story/get-by-id/${chapterId}`,
+    );
+    console.log('updated', updatedChapterResponse.data);
+    const updatedChapter = updatedChapterResponse.data;
     updatedChapter.content = blocksToHtml({
       blocks: updatedChapter.body,
     });

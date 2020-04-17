@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/user/update-or-create.js": {
+      "memory": 128
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/user/update-or-create",
+      "dest": "/api/user/update-or-create.js"
+    }
+  ]
+}
