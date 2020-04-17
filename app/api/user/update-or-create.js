@@ -44,7 +44,7 @@ app.post('/api/user/update-or-create', async function(req, res) {
       .status(200)
       .json({ ...sanityAuthor })
       .end();
-  } catch(err) {
+  } catch (err) {
     res.status(500).end();
   }
 });

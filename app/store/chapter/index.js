@@ -1,8 +1,8 @@
+import { nanoid } from 'nanoid';
+import { prosemirrorToSanityBlocks } from './prosemirrorToSanity';
 const sanityClient = require('@sanity/client');
 const blocksToHtml = require('@sanity/block-content-to-html');
 const { startingPointsQuery, getChapterById } = require('./queries');
-import { nanoid } from 'nanoid';
-import { prosemirrorToSanityBlocks } from './prosemirrorToSanity';
 
 // Sanity client initialization
 const client = sanityClient({
@@ -13,7 +13,7 @@ const client = sanityClient({
   // based on:
   // https://dev.to/danielroe/using-serverless-functions-in-nuxt-on-zeit-now-4a98
   token: window.localStorage.getItem('SANITY_TOKEN'),
-  useCdn: true // `false` if you want to ensure fresh data
+  useCdn: true, // `false` if you want to ensure fresh data
 });
 
 export const state = () => ({
@@ -30,25 +30,24 @@ export const mutations = {
 
   addChapterToStory(state, chapter) {
     delete chapter.body;
-    const story = [
-      ...state.story,
-      chapter,
-    ];
+    const story = [...state.story, chapter];
     state.story = story;
     return state;
   },
 
   updateChapter(state, chapterToUpdate) {
-    const selectedChapterIndex = state.story
-      .findIndex(ch => ch._id === chapterToUpdate._id);
+    const selectedChapterIndex = state.story.findIndex(
+      (ch) => ch._id === chapterToUpdate._id,
+    );
     state.story[selectedChapterIndex] = chapterToUpdate;
     state.story = [...state.story];
     return state;
   },
 
   setChoiceForChapter(state, { chapter, reference }) {
-    const selectedChapterIndex = state.story
-      .findIndex(ch => ch._id === chapter._id);
+    const selectedChapterIndex = state.story.findIndex(
+      (ch) => ch._id === chapter._id,
+    );
     state.story[selectedChapterIndex] = {
       ...state.story[selectedChapterIndex],
       chosen: reference,
@@ -83,15 +82,13 @@ export const actions = {
     commit('addChapterToStory', chapter);
   },
 
-  async chooseContinuation({ commit, state, }, reference) {
+  async chooseContinuation({ commit, state }, reference) {
     commit('setChoiceForChapter', {
       chapter: state.story[state.story.length - 1],
       reference,
     });
 
-    const nextChapter = await client.fetch(
-      getChapterById(reference)
-    );
+    const nextChapter = await client.fetch(getChapterById(reference));
 
     nextChapter.content = blocksToHtml({
       blocks: nextChapter.body,
@@ -130,7 +127,7 @@ export const actions = {
       title,
       continuation: {
         _type: 'reference',
-        _ref: sanityChapter._id
+        _ref: sanityChapter._id,
       },
     };
     const sanityChoice = await client.create(choice);
@@ -139,11 +136,13 @@ export const actions = {
     const sanityPatchedChapter = await client
       .patch(parentChapter._id)
       .setIfMissing({ choices: [] })
-      .insert('after', 'choices[-1]', [{
-        _key: nanoid(),
-        _ref: sanityChoice._id,
-        _type: 'reference',
-      }])
+      .insert('after', 'choices[-1]', [
+        {
+          _key: nanoid(),
+          _ref: sanityChoice._id,
+          _type: 'reference',
+        },
+      ])
       .commit();
 
     await dispatch('cancelEditMode');
@@ -151,12 +150,10 @@ export const actions = {
   },
 
   async updateChapter({ commit }, chapterId) {
-    const updatedChapter = await client.fetch(
-      getChapterById(chapterId)
-    );
+    const updatedChapter = await client.fetch(getChapterById(chapterId));
     updatedChapter.content = blocksToHtml({
       blocks: updatedChapter.body,
     });
     commit('updateChapter', updatedChapter);
-  }
-}
+  },
+};

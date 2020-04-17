@@ -1,11 +1,11 @@
 <template>
   <button
-    @click="selected"
     :class="{
       choice: true,
       'selected-choice': isSelected,
-      'secondary-choice': isSecondaryChoice
+      'secondary-choice': isSecondaryChoice,
     }"
+    @click="selected"
   >
     <slot></slot>
   </button>
@@ -16,18 +16,18 @@ export default {
   props: {
     isSelected: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isSecondaryChoice: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
     selected() {
       this.$emit('selected', { target: this.$el });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -44,7 +44,6 @@ export default {
 .choice.secondary-choice:active {
   @apply bg-green-600;
 }
-
 
 .choice.selected-choice,
 .choice.selected-choice:hover,

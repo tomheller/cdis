@@ -24,8 +24,9 @@ function transformBlock(block) {
   }
 
   if (block.content) {
-    transformedBlock.children = block.content
-      .map((child) => transformBlock(child));
+    transformedBlock.children = block.content.map((child) =>
+      transformBlock(child),
+    );
   }
 
   if (block.text) {
@@ -36,8 +37,5 @@ function transformBlock(block) {
 }
 
 export function prosemirrorToSanityBlocks(proseMirrorContent) {
-  console.log('ProseMirror ', proseMirrorContent);
-
-  return proseMirrorContent.content
-    .map((block) => transformBlock(block));
+  return proseMirrorContent.content.map((block) => transformBlock(block));
 }

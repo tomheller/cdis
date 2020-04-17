@@ -6,7 +6,6 @@ export const startingPointsQuery = `*[_type == "chapter" && entryPoint == true ]
   author->,
 }`;
 
-
 export const getChapterById = (id) => `*[_id == "${id}"] {
   _id,
   title,
@@ -14,4 +13,4 @@ export const getChapterById = (id) => `*[_id == "${id}"] {
   choices[]->,
   author->,
 }[0]
-`
+`;

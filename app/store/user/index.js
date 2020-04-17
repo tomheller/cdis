@@ -1,4 +1,3 @@
-
 export const state = () => ({
   user: '',
   image: '',
@@ -6,16 +5,15 @@ export const state = () => ({
   ref: '',
 });
 
-
 export const mutations = {
   setUser(state, sanityUser) {
     return {
       ...state,
       user: sanityUser.name,
       image: sanityUser.image,
-      ref: sanityUser._id
+      ref: sanityUser._id,
     };
-  }
+  },
 };
 
 export const actions = {
@@ -29,5 +27,5 @@ export const actions = {
       author: user,
     });
     commit('setUser', sanityUser);
-  }
+  },
 };

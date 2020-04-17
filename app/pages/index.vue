@@ -3,19 +3,30 @@
     <div>
       <div class="card">
         <h1 class="title">cdis</h1>
-        <p class="subtitle">A community driven, interactive story application.</p>
+        <p class="subtitle">
+          A community driven, interactive story application.
+        </p>
 
         <p class="step">1.</p>
         <p class="step-description">Read a chapter of the story.</p>
 
         <p class="step">2.</p>
-        <p class="step-description">At the end of a chapter, <strong>choose one option to continue</strong>.</p>
+        <p class="step-description">
+          At the end of a chapter,
+          <strong>choose one option to continue</strong>.
+        </p>
 
         <p class="step">3.</p>
-        <p class="step-description">Login to <strong>create your own choices</strong> for others to enjoy.</p>
+        <p class="step-description">
+          Login to <strong>create your own choices</strong> for others to enjoy.
+        </p>
         <p>
-          <nuxt-link v-if="$auth.loggedIn" to="/story" class="get-started">Get started</nuxt-link>
-          <button v-else class="get-started" @click="$auth.loginWith('auth0')">Log in to get started</button>
+          <nuxt-link v-if="$auth.loggedIn" to="/story" class="get-started"
+            >Get started</nuxt-link
+          >
+          <button v-else class="get-started" @click="$auth.loginWith('auth0')">
+            Log in to get started
+          </button>
         </p>
       </div>
     </div>
@@ -23,12 +34,9 @@
 </template>
 
 <script>
-
 export default {
-  components: {
-
-  },
-}
+  components: {},
+};
 </script>
 
 <style scoped>

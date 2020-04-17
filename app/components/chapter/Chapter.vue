@@ -2,7 +2,7 @@
   <div class="chapter">
     <h1 class="chapter-headline">{{ chapterData.title }}</h1>
 
-    <article v-html="chapterData.content" class="chapter-content"></article>
+    <article class="chapter-content" v-html="chapterData.content"></article>
 
     <div class="chapter-choicecontainer">
       <div v-if="chosenContinuationRef === undefined" key="choicelist">
@@ -14,9 +14,9 @@
           {{ choice.title }}
         </choice>
         <choice
-          @selected="addNewPath"
-          :isSecondaryChoice="true"
           v-if="$auth.loggedIn"
+          :is-secondary-choice="true"
+          @selected="addNewPath"
         >
           Add a new path
         </choice>
@@ -24,14 +24,14 @@
       <transition
         name="fade"
         mode="in-out"
-        v-on:enter="enter"
-        v-on:after-enter="afterEnter"
+        @enter="enter"
+        @after-enter="afterEnter"
       >
         <div v-if="chosenContinuationRef !== undefined">
           <choice
-            class="selected-choice"
             ref="chosenContinuation"
-            :isSelected="true"
+            class="selected-choice"
+            :is-selected="true"
           >
             {{ chosenContinuationTitle }}
           </choice>
@@ -39,29 +39,30 @@
       </transition>
     </div>
     <div v-if="chapterData.author" class="author">
-      <img :src="chapterData.author.image" :alt="chapterData.author.name"/>
+      <img :src="chapterData.author.image" :alt="chapterData.author.name" />
     </div>
   </div>
 </template>
 
 <script>
-import Choice from '~/components/chapter/Choice';
 import Velocity from 'velocity-animate';
+import Choice from '~/components/chapter/Choice';
 
 export default {
   components: {
-    Choice
+    Choice,
+  },
+  props: {
+    chapterData: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data() {
     return {
       chosenPositionRect: undefined,
-      localChosenRef: undefined
+      localChosenRef: undefined,
     };
-  },
-  props: {
-    chapterData: {
-      type: Object
-    }
   },
   computed: {
     chosenContinuationRef() {
@@ -69,10 +70,10 @@ export default {
     },
     chosenContinuationTitle() {
       const chosenContinuation = (this.chapterData.choices || []).find(
-        (cont) => cont.continuation._ref === this.chosenContinuationRef
+        (cont) => cont.continuation._ref === this.chosenContinuationRef,
       );
       return chosenContinuation ? chosenContinuation.title : '';
-    }
+    },
   },
   methods: {
     choose(choice, { target }) {
@@ -82,7 +83,7 @@ export default {
 
     // the done callback is optional when
     // used in combination with CSS
-    enter(el, done) {
+    enter(_el, done) {
       const targetRect = this.$refs.chosenContinuation.$el.getBoundingClientRect();
       const offsetX = this.chosenPositionRect.x - targetRect.x;
       const offsetY = this.chosenPositionRect.y - targetRect.y;
@@ -90,21 +91,21 @@ export default {
         this.$refs.chosenContinuation.$el,
         {
           translateX: offsetX,
-          translateY: offsetY
+          translateY: offsetY,
         },
-        { duration: 0 }
+        { duration: 0 },
       );
       Velocity(
         this.$refs.chosenContinuation.$el,
         {
           translateX: 0,
-          translateY: 0
+          translateY: 0,
         },
         {
           duration: 300,
           easing: 'easeOutInQuart',
-          complete: done
-        }
+          complete: done,
+        },
       );
     },
     afterEnter() {
@@ -115,8 +116,8 @@ export default {
       this.$store.dispatch('user/updateOrCreate', this.$auth.user).then(() => {
         this.$store.dispatch('chapter/addNewPath', this.chapterData);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

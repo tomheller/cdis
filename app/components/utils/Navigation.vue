@@ -13,14 +13,13 @@ import { mapGetters } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['isAuthenticated'])
+    ...mapGetters(['isAuthenticated']),
   },
-  methods: { }
+  methods: {},
 };
 </script>
 
 <style>
-
 .header {
   @apply py-2 bg-gray-300 shadow;
 }

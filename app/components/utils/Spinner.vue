@@ -13,21 +13,20 @@
 </template>
 
 <style>
-
-  @keyframes spinning {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+@keyframes spinning {
+  0% {
+    transform: rotate(0deg);
   }
-  .spinner {
-    width: 1em;
-    height: 1em;
-    display: inline-block;
+  100% {
+    transform: rotate(360deg);
   }
-  .spinning {
-    animation: spinning 1.5s infinite linear;
-  }
+}
+.spinner {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+}
+.spinning {
+  animation: spinning 1.5s infinite linear;
+}
 </style>

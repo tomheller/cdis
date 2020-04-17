@@ -13,7 +13,7 @@ export default {
   components: {
     Story,
   },
-}
+};
 </script>
 
 <style>
@@ -27,5 +27,4 @@ export default {
   align-items: center;
   text-align: center;
 }
-
 </style>

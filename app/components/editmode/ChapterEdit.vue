@@ -4,13 +4,16 @@
       Currently adding a path choice to
       <em>&ldquo;{{ parentChapter.title }}&rdquo;</em>
     </p>
-    <div class="chapter-edit-formwrapper" :class="{ 'chapter-is-saving': saving }">
+    <div
+      class="chapter-edit-formwrapper"
+      :class="{ 'chapter-is-saving': saving }"
+    >
       <div class="formwrapper">
         <label>Chapter title</label>
         <input
-          type="text"
           ref="titleFormfield"
           v-model="newTitle"
+          type="text"
           required
           placeholder="Add a title for your new chapter"
         />
@@ -19,9 +22,9 @@
         <label>Chapter content</label>
         <div class="editorwrapper">
           <editor-menu-bubble
+            v-slot="{ commands, isActive, menu }"
             :editor="editor"
             :keep-in-bounds="true"
-            v-slot="{ commands, isActive, menu }"
           >
             <div
               class="menububble"
@@ -30,17 +33,17 @@
             >
               <button
                 :class="{ 'is-active': isActive.bold() }"
-                @click="commands.bold"
                 style="font-weight: bold;"
                 title="Bold"
+                @click="commands.bold"
               >
                 B
               </button>
               <button
                 :class="{ 'is-active': isActive.italic() }"
-                @click="commands.italic"
                 style="font-style: italic; font-family: serif;"
                 title="Italic"
+                @click="commands.italic"
               >
                 I
               </button>
@@ -51,10 +54,10 @@
       </div>
     </div>
     <div class="formwrapper formwrapper-submit">
-      <button @click="cancelEditMode" class="editmode-action editmode-cancel">
+      <button class="editmode-action editmode-cancel" @click="cancelEditMode">
         Cancel
       </button>
-      <button @click="saveChapter" class="editmode-action editmode-submit">
+      <button class="editmode-action editmode-submit" @click="saveChapter">
         Save chapter <spinner v-if="saving" />
       </button>
     </div>
@@ -62,9 +65,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { Editor, EditorContent, EditorMenuBubble } from 'tiptap';
 import { Bold, Italic, History } from 'tiptap-extensions';
-import { mapState } from 'vuex';
 import Spinner from '~/components/utils/Spinner';
 
 export default {
@@ -78,11 +81,22 @@ export default {
       editor: new Editor({
         content:
           '<p>This is just a <em>boring</em> <strong>paragraph</strong></p>',
-        extensions: [new Bold(), new Italic(), new History(),]
+        extensions: [new Bold(), new Italic(), new History()],
       }),
       newTitle: 'My new title',
       saving: false,
     };
+  },
+  computed: {
+    ...mapState({
+      parentChapter: (state) => state.chapter.currentlyAddingToChapter,
+    }),
+  },
+  mounted() {
+    this.$refs.titleFormfield.focus();
+  },
+  beforeDestroy() {
+    this.editor.destroy();
   },
   methods: {
     cancelEditMode() {
@@ -99,19 +113,8 @@ export default {
         parentChapter: this.parentChapter,
       });
       this.saving = false;
-    }
+    },
   },
-  computed: {
-    ...mapState({
-      parentChapter: (state) => state.chapter.currentlyAddingToChapter,
-    }),
-  },
-  mounted() {
-    this.$refs.titleFormfield.focus();
-  },
-  beforeDestroy() {
-    this.editor.destroy();
-  }
 };
 </script>
 

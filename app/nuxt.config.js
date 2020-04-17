@@ -16,10 +16,10 @@ module.exports = {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
-      }
+        content: process.env.npm_package_description || '',
+      },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   /*
    ** Customize the progress-bar color
@@ -42,7 +42,7 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
   ],
   /*
    ** Nuxt.js modules
@@ -63,15 +63,15 @@ module.exports = {
   auth: {
     redirect: {
       login: '/', // redirect user when not connected
-      callback: '/auth/signed-in'
+      callback: '/auth/signed-in',
     },
     strategies: {
       local: false,
       auth0: {
         domain: process.env.AUTH0_DOMAIN,
-        client_id: process.env.AUTH0_CLIENT_ID
-      }
-    }
+        client_id: process.env.AUTH0_CLIENT_ID,
+      },
+    },
   },
   /*
    ** Build configuration
@@ -80,9 +80,9 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(_config, _ctx) {},
   },
-  serverMiddleware: isServerlessEnvironment ? [] : [
-    '~/api/user/update-or-create.js'
-  ],
-}
+  serverMiddleware: isServerlessEnvironment
+    ? []
+    : ['~/api/user/update-or-create.js'],
+};
