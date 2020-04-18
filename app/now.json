@@ -2,12 +2,33 @@
   "functions": {
     "api/user/update-or-create.js": {
       "memory": 128
+    },
+    "api/story/get-by-id.js": {
+      "memory": 128
+    },
+    "api/story/get-starting-points.js": {
+      "memory": 128
+    },
+    "api/story/save-chapter.js": {
+      "memory": 128
     }
   },
   "routes": [
     {
       "src": "/api/user/update-or-create",
       "dest": "/api/user/update-or-create.js"
+    },
+    {
+      "src": "/api/story/get-by-id",
+      "dest": "/api/story/get-by-id.js"
+    },
+    {
+      "src": "/api/story/get-starting-points",
+      "dest": "/api/story/get-starting-points.js"
+    },
+    {
+      "src": "/api/story/save-chapter",
+      "dest": "/api/story/save-chapter.js"
     }
   ]
 }
