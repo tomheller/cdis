@@ -14,7 +14,6 @@ export default {
     Story,
   },
   mounted() {
-    console.log('mounted');
     this.$store.dispatch('story/startStory', this.$route.params.id);
   },
 };
