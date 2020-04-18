@@ -13,10 +13,14 @@ export default {
   components: {
     Story,
   },
+  mounted() {
+    console.log('mounted');
+    this.$store.dispatch('story/startStory', this.$route.params.id);
+  },
 };
 </script>
 
-<style>
+<style scoped>
 /* Sample `apply` at-rules with Tailwind CSS
 */
 .container {

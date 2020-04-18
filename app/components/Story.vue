@@ -26,9 +26,6 @@ export default {
       story: (state) => state.chapter.story,
     }),
   },
-  mounted() {
-    this.$store.dispatch('chapter/loadEntrypoints');
-  },
 };
 </script>
 

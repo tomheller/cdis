@@ -52,21 +52,12 @@ export const mutations = {
 };
 
 export const actions = {
-  async loadEntrypoints({ commit }) {
-    const entryComponentsResponse = await this.$axios.get(
-      '/api/story/get-starting-points/',
-    );
-    const entryComponents = entryComponentsResponse.data;
-    const entry = entryComponents[0];
-    entry.content = blocksToHtml({
-      blocks: entry.body,
-    });
-    commit('resetStory');
-    commit('addChapterToStory', entry);
-  },
-
   addChapterToStory({ commit }, chapter) {
     commit('addChapterToStory', chapter);
+  },
+
+  resetStory({ commit }) {
+    commit('resetStory');
   },
 
   async chooseContinuation({ commit, state }, reference) {
@@ -112,16 +103,13 @@ export const actions = {
     });
 
     await dispatch('cancelEditMode');
-    console.log('patched', patchedChapter.data);
     await dispatch('updateChapter', patchedChapter.data._id);
   },
 
   async updateChapter({ commit }, chapterId) {
-    console.log('update chapter', chapterId);
     const updatedChapterResponse = await this.$axios.get(
       `/api/story/get-by-id/${chapterId}`,
     );
-    console.log('updated', updatedChapterResponse.data);
     const updatedChapter = updatedChapterResponse.data;
     updatedChapter.content = blocksToHtml({
       blocks: updatedChapter.body,
