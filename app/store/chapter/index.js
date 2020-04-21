@@ -93,10 +93,12 @@ export const actions = {
 
   async saveChapter(
     { dispatch, rootState },
-    { title, content, parentChapter },
+    { title, choiceTitle, content, parentChapter },
   ) {
+    await dispatch('user/updateOrCreate', rootState.auth.user, { root: true });
     const patchedChapter = await this.$axios.post('/api/story/save-chapter', {
       title,
+      choiceTitle,
       content,
       author: rootState.user.ref,
       parentChapterId: parentChapter._id,

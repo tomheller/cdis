@@ -18,7 +18,7 @@ app.use(express.json());
 
 // It is important that the full path is specified here
 app.post('/api/story/save-chapter', async function(req, res) {
-  const { content, title, author, parentChapterId } = req.body;
+  const { content, title, author, choiceTitle, parentChapterId } = req.body;
   try {
     // Create the chapter
     const chapter = {
@@ -36,7 +36,7 @@ app.post('/api/story/save-chapter', async function(req, res) {
     // Create the choice
     const choice = {
       _type: 'choice',
-      title,
+      title: choiceTitle,
       continuation: {
         _type: 'reference',
         _ref: sanityChapter._id,
@@ -62,6 +62,7 @@ app.post('/api/story/save-chapter', async function(req, res) {
       .json(sanityPatchedChapter)
       .end();
   } catch (err) {
+    console.log(err);
     res.status(500).end();
   }
 });

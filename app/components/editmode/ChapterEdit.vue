@@ -9,6 +9,16 @@
       :class="{ 'chapter-is-saving': saving }"
     >
       <div class="formwrapper">
+        <label>Choice title</label>
+        <input
+          ref="choiceTitleFormfield"
+          v-model="choiceTitle"
+          type="text"
+          required
+          placeholder="Choice title that will be displayed"
+        />
+      </div>
+      <div class="formwrapper">
         <label>Chapter title</label>
         <input
           ref="titleFormfield"
@@ -79,11 +89,11 @@ export default {
   data() {
     return {
       editor: new Editor({
-        content:
-          '<p>This is just a <em>boring</em> <strong>paragraph</strong></p>',
+        content: '',
         extensions: [new Bold(), new Italic(), new History()],
       }),
-      newTitle: 'My new title',
+      newTitle: '',
+      choiceTitle: '',
       saving: false,
     };
   },
@@ -93,7 +103,7 @@ export default {
     }),
   },
   mounted() {
-    this.$refs.titleFormfield.focus();
+    this.$refs.choiceTitleFormfield.focus();
   },
   beforeDestroy() {
     this.editor.destroy();
@@ -109,6 +119,7 @@ export default {
       this.saving = true;
       await this.$store.dispatch('chapter/saveChapter', {
         title: this.newTitle,
+        choiceTitle: this.choiceTitle,
         content: this.editor.getJSON(),
         parentChapter: this.parentChapter,
       });

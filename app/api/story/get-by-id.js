@@ -7,7 +7,7 @@ const client = sanityClient({
   projectId: process.env.SANITY_PROJECTID,
   dataset: process.env.SANITY_DATASET,
   // token: process.env.SANITY_TOKEN,
-  useCdn: true,
+  useCdn: false,
 });
 
 const express = require('express');

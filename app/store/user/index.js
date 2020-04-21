@@ -7,12 +7,9 @@ export const state = () => ({
 
 export const mutations = {
   setUser(state, sanityUser) {
-    return {
-      ...state,
-      user: sanityUser.name,
-      image: sanityUser.image,
-      ref: sanityUser._id,
-    };
+    state.user = sanityUser.name;
+    state.image = sanityUser.image;
+    state.ref = sanityUser._id;
   },
 };
 
