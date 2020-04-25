@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const express = require('express');
 dotenv.config();
 
 // Sanity client initialization
@@ -9,8 +10,6 @@ const client = sanityClient({
   // token: process.env.SANITY_TOKEN,
   useCdn: true,
 });
-
-const express = require('express');
 
 const app = express();
 app.use(express.json());
