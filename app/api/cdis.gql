@@ -1,0 +1,26 @@
+type Chapter @collection(name: "chapters") {
+  title: String!
+  entryPoint: Boolean!
+  author: Author!
+  body: String!
+  choices: [Choice!]
+}
+
+type Author @collection(name: "authors") {
+  name: String!
+  identity: String!
+  image: String!
+  email: String!
+}
+
+type Choice @collection(name: "choices") {
+  title: String!
+  continuation: Chapter!
+}
+
+type Query {
+  allChapters: [Chapter!]! @index(name: "all_chapters")
+  allChoices: [Choice!]! @index(name: "all_choices")
+  allAuthors: [Author!]! @index(name: "all_authors")
+  author(identity: String): Author
+}
