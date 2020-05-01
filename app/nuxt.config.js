@@ -70,7 +70,7 @@ module.exports = {
       auth0: {
         domain: process.env.AUTH0_DOMAIN,
         client_id: process.env.AUTH0_CLIENT_ID,
-        audience: '/api/story/save-chapter',
+        audience: 'story/api',
       },
     },
   },
@@ -93,5 +93,6 @@ module.exports = {
         '~/api/story/get-starting-points.js',
         '~/api/story/get-by-id.js',
         '~/api/story/save-chapter.js',
+        '~/api/story/new-story.js',
       ],
 };

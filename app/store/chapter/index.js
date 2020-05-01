@@ -118,4 +118,13 @@ export const actions = {
     });
     commit('updateChapter', updatedChapter);
   },
+
+  async createNewStory({ rootState }, { title, content }) {
+    const newStory = await this.$axios.post('/api/story/new-story', {
+      title,
+      content,
+      author: rootState.user.ref,
+    });
+    console.log(newStory);
+  },
 };

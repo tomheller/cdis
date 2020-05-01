@@ -1,7 +1,8 @@
 type Chapter @collection(name: "chapters") {
+  id: ID!
   title: String!
   entryPoint: Boolean!
-  author: Author!
+  author: Author! @relation
   body: String!
   choices: [Choice!]
 }
@@ -14,6 +15,7 @@ type Author @collection(name: "authors") {
 }
 
 type Choice @collection(name: "choices") {
+  id: ID!
   title: String!
   continuation: Chapter!
 }
@@ -23,4 +25,6 @@ type Query {
   allChoices: [Choice!]! @index(name: "all_choices")
   allAuthors: [Author!]! @index(name: "all_authors")
   author(identity: String): Author
+  entrypoints(entryPoint: Boolean): [Chapter!]
+  chapter(id: ID!): Chapter
 }

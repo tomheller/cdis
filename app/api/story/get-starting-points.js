@@ -6,9 +6,12 @@ const app = express();
 app.use(express.json());
 
 const startingPointsQuery = gql`
-  query allChapters {
-    allChapters {
-      before
+  query findEntryPoints {
+    entrypoints(entryPoint: true) {
+      data {
+        id
+        title
+      }
     }
   }
 `;
@@ -18,17 +21,9 @@ app.get('/api/story/get-starting-points', async function(req, res) {
   try {
     const startingPoints = await client.query({ query: startingPointsQuery });
 
-    // const startingPoints = await client.fetch(`*[_type == "chapter" && entryPoint == true ] {
-    //   _id,
-    //   title,
-    //   body[],
-    //   choices[]->,
-    //   author->,
-    // }`);
-
     res
       .status(200)
-      .json(startingPoints)
+      .json(startingPoints.data.entrypoints.data)
       .end();
   } catch (err) {
     console.log(err);

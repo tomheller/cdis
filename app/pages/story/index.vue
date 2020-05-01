@@ -12,12 +12,22 @@
         >Choose this story</nuxt-link
       >
     </div>
+    <div class="story story-new">
+      <h2 class="story-title">Create</h2>
+      <p>You can also start a new story for everyone to enjoy and extend.</p>
+      <nuxt-link
+        :to="{
+          name: 'story-new',
+        }"
+        class="story-choose"
+        >Create a new story</nuxt-link
+      >
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-
 export default {
   computed: {
     ...mapState({
@@ -45,6 +55,13 @@ export default {
 
 .story {
   @apply bg-white rounded p-4;
+}
+
+.story-new .story-choose {
+  @apply bg-blue-500;
+}
+.story-new .story-choose:hover {
+  @apply bg-blue-600;
 }
 
 .story-title {

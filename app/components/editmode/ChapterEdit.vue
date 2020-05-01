@@ -1,14 +1,17 @@
 <template>
   <div class="editmode-card">
-    <p class="editmode-info">
+    <p class="editmode-info" v-if="!isNewStory">
       Currently adding a path choice to
       <em>&ldquo;{{ parentChapter.title }}&rdquo;</em>
+    </p>
+    <p v-else>
+      You are creating the first chapter in this story.
     </p>
     <div
       class="chapter-edit-formwrapper"
       :class="{ 'chapter-is-saving': saving }"
     >
-      <div class="formwrapper">
+      <div class="formwrapper" :hidden="isNewStory">
         <label>Choice title</label>
         <input
           ref="choiceTitleFormfield"
@@ -89,10 +92,10 @@ export default {
   data() {
     return {
       editor: new Editor({
-        content: '',
+        content: 'Hello',
         extensions: [new Bold(), new Italic(), new History()],
       }),
-      newTitle: '',
+      newTitle: 'Hello bello',
       choiceTitle: '',
       saving: false,
     };
@@ -100,6 +103,8 @@ export default {
   computed: {
     ...mapState({
       parentChapter: (state) => state.chapter.currentlyAddingToChapter,
+      isNewStory: (state) =>
+        state.chapter.currentlyAddingToChapter.id === undefined,
     }),
   },
   mounted() {
@@ -117,12 +122,20 @@ export default {
         return;
       }
       this.saving = true;
-      await this.$store.dispatch('chapter/saveChapter', {
-        title: this.newTitle,
-        choiceTitle: this.choiceTitle,
-        content: this.editor.getJSON(),
-        parentChapter: this.parentChapter,
-      });
+      if (this.isNewStory) {
+        console.log('Create new story');
+        await this.$store.dispatch('chapter/createNewStory', {
+          title: this.newTitle,
+          content: this.editor.getJSON(),
+        });
+      } else {
+        await this.$store.dispatch('chapter/saveChapter', {
+          title: this.newTitle,
+          choiceTitle: this.choiceTitle,
+          content: this.editor.getJSON(),
+          parentChapter: this.parentChapter,
+        });
+      }
       this.saving = false;
     },
   },
