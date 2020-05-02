@@ -1,0 +1,47 @@
+Do(
+  // Delete all chapters
+  Map(
+    Paginate(Documents(Collection('chapters'))),
+    Lambda(x => Delete(x))
+  ),
+
+  // Create initial set
+  Map([
+    ["This is the start of our story", true, "<p>Once upon a time, in a far away land there was a small little sloth. The sloth was slow, even for sloth-related speeds.</p><p>One day, the sloth encountered a tree.</p>"],
+    ["Climb up the tree", false, "<p>The sloth decided to climb the tree and have a little snack on the leaves. The nice, green and juicy leaves.. mmh Yumm.</p>"],
+    ["Walk around and follow the path", false, "<p>The sloth walked around the tree within an hour and continued on its way to the beach.</p>"],
+    ["The sloth meets a new friend", false, "<p>While the sloth slowly passed the tree, a small gray creature appeared between the leaves. When the sloth noticed the staring thing between the twigs, it was a little startled.</p><p>The small creature stepped forward and introduced itself: \"Hello, I am a <em>Quesi</em>, part Quocca, part donkey... it's a long story\"</p>"],
+  ],Lambda(
+    ["title", "entrypoint", "content"],
+    Create(
+      Collection("chapters"), {
+        data: {
+          author: Ref(Collection("authors"), "264402646287254018"),
+          body: Var("content"),
+          entryPoint: Var("entrypoint"),
+          title: Var("title"),
+          choices: [],
+        }
+      }
+    ))
+  ),
+
+  Update(Select('ref', Get(Match(Index('chapters_by_title'), 'This is the start of our story'))), {
+    data: {
+      choices: [
+        {
+          title: "Climb up the tree",
+          continuation: Select('ref', Get(Match(Index('chapters_by_title'), "Climb up the tree"))),
+        },
+        {
+          title: "Walk around and follow the path",
+          continuation: Select('ref', Get(Match(Index('chapters_by_title'), "Walk around and follow the path"))),
+        },
+        {
+          title: "The sloth meets a new friend",
+          continuation: Select('ref', Get(Match(Index('chapters_by_title'), "The sloth meets a new friend"))),
+        },
+      ]
+    }
+  })
+)
