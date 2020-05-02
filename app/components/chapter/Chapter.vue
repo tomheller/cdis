@@ -70,7 +70,7 @@ export default {
     },
     chosenContinuationTitle() {
       const chosenContinuation = (this.chapterData.choices || []).find(
-        (cont) => cont.continuation._ref === this.chosenContinuationRef,
+        (cont) => cont.continuation._id === this.chosenContinuationRef,
       );
       return chosenContinuation ? chosenContinuation.title : '';
     },
@@ -78,7 +78,7 @@ export default {
   methods: {
     choose(choice, { target }) {
       this.chosenPositionRect = target.getBoundingClientRect();
-      this.localChosenRef = choice.continuation._ref;
+      this.localChosenRef = choice.continuation._id;
     },
 
     // the done callback is optional when

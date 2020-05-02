@@ -32,13 +32,12 @@ app.get('/api/story/get-by-id/:id', async function(req, res) {
       }
   `;
     const dbChapter = await client.query({ query: getChapter });
-    console.log(dbChapter);
     res
       .status(200)
       .json(dbChapter.data.findChapterByID)
       .end();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).end();
   }
 });

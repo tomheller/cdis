@@ -47,7 +47,7 @@ app.post('/api/user/update-or-create', async function(req, res) {
       .json({ ...dbAuthor.data.author })
       .end();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).end();
   }
 });

@@ -40,7 +40,7 @@ app.post('/api/story/new-story', jwtCheck, async function(req, res) {
       .json(newStoryChapter.data.createChapter)
       .end();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).end();
   }
 });

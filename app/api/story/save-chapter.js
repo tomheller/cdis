@@ -69,7 +69,7 @@ app.post('/api/story/save-chapter', jwtCheck, async function(req, res) {
       .json(updatedChapter.data.addChoiceToChapter)
       .end();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).end();
   }
 });
