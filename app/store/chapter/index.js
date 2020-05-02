@@ -18,7 +18,7 @@ export const mutations = {
 
   updateChapter(state, chapterToUpdate) {
     const selectedChapterIndex = state.story.findIndex(
-      (ch) => ch._id === chapterToUpdate._id,
+      (ch) => ch.id === chapterToUpdate.id,
     );
     state.story[selectedChapterIndex] = chapterToUpdate;
     state.story = [...state.story];
@@ -85,7 +85,7 @@ export const actions = {
   },
 
   async saveChapter(
-    { dispatch, rootState },
+    { commit, dispatch, rootState },
     { title, choiceTitle, content, parentChapter },
   ) {
     await dispatch('user/updateOrCreate', rootState.auth.user, { root: true });
@@ -98,15 +98,7 @@ export const actions = {
     });
 
     await dispatch('cancelEditMode');
-    await dispatch('updateChapter', patchedChapter.data._id);
-  },
-
-  async updateChapter({ commit }, chapterId) {
-    const updatedChapterResponse = await this.$axios.get(
-      `/api/story/get-by-id/${chapterId}`,
-    );
-    const updatedChapter = updatedChapterResponse.data;
-    commit('updateChapter', updatedChapter);
+    commit('updateChapter', patchedChapter.data);
   },
 
   async createNewStory({ dispatch, rootState }, { title, content }) {

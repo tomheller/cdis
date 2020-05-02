@@ -15,7 +15,6 @@ type Author @collection(name: "authors") {
 }
 
 type Choice @embedded {
-  id: ID!
   title: String!
   continuation: Chapter! @relation
 }
@@ -26,4 +25,9 @@ type Query {
   author(identity: String): Author
   entrypoints(entryPoint: Boolean): [Chapter!]
   chapter(id: ID!): Chapter
+}
+
+type Mutation {
+  # prettier-ignore
+  addChoiceToChapter(chapterId: ID!, choiceTitle: String!, choiceContinuation: ID!): Chapter! @resolver(name: "add_choice_to_chapter")
 }

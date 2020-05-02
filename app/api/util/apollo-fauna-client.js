@@ -14,7 +14,15 @@ const client = new ApolloClient({
       authorization: `Bearer ${process.env.FAUNADB_KEY}`,
     },
   }),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    dataIdFromObject: (object) => object.ref || null,
+  }),
+  defaultOptions: {
+    query: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    },
+  },
 });
 
 module.exports = client;

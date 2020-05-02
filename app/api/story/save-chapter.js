@@ -1,19 +1,12 @@
 const dotenv = require('dotenv');
 const express = require('express');
-const prosemirrorToSanityBlocks = require('../util/prosemirrorToSanity');
 const nanoid = require('nanoid');
+const gql = require('graphql-tag');
+const client = require('../util/apollo-fauna-client');
+const sanitizeHtml = require('sanitize-html');
 const jwtCheck = require('../util/jwt-auth');
 
 dotenv.config();
-
-// Sanity client initialization
-const sanityClient = require('@sanity/client');
-const client = sanityClient({
-  projectId: process.env.SANITY_PROJECTID,
-  dataset: process.env.SANITY_DATASET,
-  token: process.env.SANITY_TOKEN,
-  useCdn: false,
-});
 
 const app = express();
 app.use(express.json());
@@ -22,46 +15,60 @@ app.use(express.json());
 app.post('/api/story/save-chapter', jwtCheck, async function(req, res) {
   const { content, title, author, choiceTitle, parentChapterId } = req.body;
   try {
-    // Create the chapter
-    const chapter = {
-      _type: 'chapter',
-      title,
-      body: prosemirrorToSanityBlocks(content),
-      author: {
-        _type: 'reference',
-        _ref: author,
+    const newChapterQuery = gql`
+    mutation {
+      createChapter(
+        data: {
+          id: "${nanoid()}",
+          title: "${title}",
+          entryPoint: false,
+          author: {
+            connect: "${author}"
+          },
+          body: "${sanitizeHtml(content)}",
+          choices: []
+        }
+      ) {
+        _id,
       },
-      choices: [],
-    };
-    const sanityChapter = await client.create(chapter);
+    }
+    `;
+    const newStoryChapter = await client.mutate({
+      mutation: newChapterQuery,
+    });
 
-    // Create the choice
-    const choice = {
-      _type: 'choice',
-      title: choiceTitle,
-      continuation: {
-        _type: 'reference',
-        _ref: sanityChapter._id,
-      },
-    };
-    const sanityChoice = await client.create(choice);
-
-    // Add the choice to the chapter being modified.
-    const sanityPatchedChapter = await client
-      .patch(parentChapterId)
-      .setIfMissing({ choices: [] })
-      .insert('after', 'choices[-1]', [
-        {
-          _key: nanoid(),
-          _ref: sanityChoice._id,
-          _type: 'reference',
-        },
-      ])
-      .commit();
-
+    const mutateOriginalChapter = gql`
+    mutation addChoice{
+      addChoiceToChapter(
+        chapterId: "${parentChapterId}",
+        choiceTitle: "${choiceTitle}",
+        choiceContinuation: "${newStoryChapter.data.createChapter._id}"
+      )
+      {
+        _id
+        id
+        title
+        author {
+          name
+          email
+          image
+        }
+        body
+        choices {
+          title,
+          continuation {
+            id
+          }
+        }
+      }
+    }
+    `;
+    const updatedChapter = await client.mutate({
+      mutation: mutateOriginalChapter,
+    });
     res
       .status(200)
-      .json(sanityPatchedChapter)
+      .json(updatedChapter.data.addChoiceToChapter)
       .end();
   } catch (err) {
     console.log(err);

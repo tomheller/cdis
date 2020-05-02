@@ -15,6 +15,8 @@ app.get('/api/story/get-by-id/:id', async function(req, res) {
     const getChapter = gql`
       query getChapterById{
         chapter(id: "${id}") {
+          _id
+          id
           title
           body
           author {
