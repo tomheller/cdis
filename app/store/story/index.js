@@ -1,5 +1,3 @@
-import blocksToHtml from '@sanity/block-content-to-html';
-
 export const state = () => ({
   availableStories: [],
   chosenStory: {},
@@ -8,6 +6,10 @@ export const state = () => ({
 export const mutations = {
   setAvailableStories(state, availableStories) {
     state.availableStories = availableStories;
+    return state;
+  },
+  resetChosenStory(state) {
+    state.chosenStory = {};
     return state;
   },
 };
@@ -19,9 +21,6 @@ export const actions = {
     );
     const availableStories = [];
     for (const story of storiesResponse.data) {
-      story.content = blocksToHtml({
-        blocks: story.body,
-      });
       availableStories.push(story);
     }
     commit('setAvailableStories', availableStories);
@@ -32,12 +31,13 @@ export const actions = {
       `/api/story/get-by-id/${reference}`,
     );
     const startStoryChapter = startStoryChapterResponse.data;
-    startStoryChapter.content = blocksToHtml({
-      blocks: startStoryChapter.body,
-    });
     await dispatch('chapter/resetStory', null, { root: true });
     await dispatch('chapter/addChapterToStory', startStoryChapter, {
       root: true,
     });
+  },
+
+  resetStory({ commit }) {
+    commit('resetChosenStory');
   },
 };

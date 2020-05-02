@@ -1,14 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
-
-// Sanity client initialization
-const sanityClient = require('@sanity/client');
-const client = sanityClient({
-  projectId: process.env.SANITY_PROJECTID,
-  dataset: process.env.SANITY_DATASET,
-  // token: process.env.SANITY_TOKEN,
-  useCdn: false,
-});
+const gql = require('graphql-tag');
+const client = require('../util/apollo-fauna-client');
 
 const express = require('express');
 
@@ -19,19 +12,31 @@ app.use(express.json());
 app.get('/api/story/get-by-id/:id', async function(req, res) {
   const id = req.params.id;
   try {
-    const chapter = await client.fetch(`*[_id == "${id}"] {
-      _id,
-      title,
-      body[],
-      choices[]->,
-      author->,
-    }[0]`);
-
+    const getChapter = gql`
+      query getChapterById{
+        chapter(id: "${id}") {
+          title
+          body
+          author {
+            name
+            image
+          }
+          choices {
+            title
+            continuation {
+              id
+            }
+          }
+        }
+      }
+  `;
+    const dbChapter = await client.query({ query: getChapter });
     res
       .status(200)
-      .json(chapter)
+      .json(dbChapter.data.chapter)
       .end();
   } catch (err) {
+    console.log(err);
     res.status(500).end();
   }
 });

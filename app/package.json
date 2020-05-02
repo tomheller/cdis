@@ -42,6 +42,7 @@
     "jwks-rsa": "^1.8.0",
     "node-fetch": "^2.6.0",
     "nuxt": "^2.0.0",
+    "sanitize-html": "^1.23.0",
     "tiptap": "^1.27.0",
     "tiptap-extensions": "^1.29.0",
     "typescript": "^3.8.3",

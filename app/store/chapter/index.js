@@ -1,5 +1,3 @@
-const blocksToHtml = require('@sanity/block-content-to-html');
-
 export const state = () => ({
   story: [],
   editMode: false,
@@ -13,7 +11,6 @@ export const mutations = {
   },
 
   addChapterToStory(state, chapter) {
-    delete chapter.body;
     const story = [...state.story, chapter];
     state.story = story;
     return state;
@@ -70,10 +67,6 @@ export const actions = {
       `/api/story/get-by-id/${reference}`,
     );
     const nextChapter = nextChapterResponse.data;
-    nextChapter.content = blocksToHtml({
-      blocks: nextChapter.body,
-    });
-
     commit('addChapterToStory', nextChapter);
   },
 
@@ -113,18 +106,16 @@ export const actions = {
       `/api/story/get-by-id/${chapterId}`,
     );
     const updatedChapter = updatedChapterResponse.data;
-    updatedChapter.content = blocksToHtml({
-      blocks: updatedChapter.body,
-    });
     commit('updateChapter', updatedChapter);
   },
 
-  async createNewStory({ rootState }, { title, content }) {
+  async createNewStory({ dispatch, rootState }, { title, content }) {
     const newStory = await this.$axios.post('/api/story/new-story', {
       title,
       content,
       author: rootState.user.ref,
     });
-    console.log(newStory);
+    await dispatch('cancelEditMode');
+    return newStory.data;
   },
 };

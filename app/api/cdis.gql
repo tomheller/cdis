@@ -14,15 +14,14 @@ type Author @collection(name: "authors") {
   email: String!
 }
 
-type Choice @collection(name: "choices") {
+type Choice @embedded {
   id: ID!
   title: String!
-  continuation: Chapter!
+  continuation: Chapter! @relation
 }
 
 type Query {
   allChapters: [Chapter!]! @index(name: "all_chapters")
-  allChoices: [Choice!]! @index(name: "all_choices")
   allAuthors: [Author!]! @index(name: "all_authors")
   author(identity: String): Author
   entrypoints(entryPoint: Boolean): [Chapter!]

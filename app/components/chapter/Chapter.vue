@@ -2,7 +2,7 @@
   <div class="chapter">
     <h1 class="chapter-headline">{{ chapterData.title }}</h1>
 
-    <article class="chapter-content" v-html="chapterData.content"></article>
+    <article class="chapter-content" v-html="chapterData.body"></article>
 
     <div class="chapter-choicecontainer">
       <div v-if="chosenContinuationRef === undefined" key="choicelist">

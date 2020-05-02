@@ -20,7 +20,6 @@ app.post('/api/user/update-or-create', async function(req, res) {
     }
   `;
     let dbAuthor = await client.query({ query: getAuthor });
-
     // If the user does not exist, create one
     if (!dbAuthor.data.author) {
       const createAuthor = gql`

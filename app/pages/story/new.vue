@@ -15,6 +15,8 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('user/updateOrCreate', this.$auth.user);
+    await this.$store.dispatch('story/resetChosenStory');
+    await this.$store.dispatch('chapter/resetStory');
     await this.$store.dispatch('chapter/enterEditMode');
   },
 };

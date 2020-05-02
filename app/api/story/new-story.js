@@ -4,6 +4,7 @@ const nanoid = require('nanoid');
 const jwtCheck = require('../util/jwt-auth');
 const gql = require('graphql-tag');
 const client = require('../util/apollo-fauna-client');
+const sanitizeHtml = require('sanitize-html');
 
 dotenv.config();
 
@@ -12,8 +13,9 @@ app.use(express.json());
 
 // It is important that the full path is specified here
 app.post('/api/story/new-story', jwtCheck, async function(req, res) {
-  const { content, title, author } = req.body;
-  const createStoryEntrypoint = gql`
+  try {
+    const { content, title, author } = req.body;
+    const createStoryEntrypoint = gql`
     mutation {
       createChapter(
         data: {
@@ -23,27 +25,17 @@ app.post('/api/story/new-story', jwtCheck, async function(req, res) {
           author: {
             connect: "${author}"
           },
-          body: "${content}",
+          body: "${sanitizeHtml(content)}",
           choices: []
         }
       ) {
         id,
-        title,
-        author {
-          name,
-          image,
-        },
-        body,
-        choices {
-          title
-        },
       },
     }
     `;
-  const newStoryChapter = await client.mutate({
-    mutation: createStoryEntrypoint,
-  });
-  try {
+    const newStoryChapter = await client.mutate({
+      mutation: createStoryEntrypoint,
+    });
     res
       .status(200)
       .json(newStoryChapter.data.createChapter)

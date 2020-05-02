@@ -20,13 +20,11 @@ const startingPointsQuery = gql`
 app.get('/api/story/get-starting-points', async function(req, res) {
   try {
     const startingPoints = await client.query({ query: startingPointsQuery });
-
     res
       .status(200)
       .json(startingPoints.data.entrypoints.data)
       .end();
   } catch (err) {
-    console.log(err);
     res.status(500).end();
   }
 });

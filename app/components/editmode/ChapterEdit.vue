@@ -123,16 +123,16 @@ export default {
       }
       this.saving = true;
       if (this.isNewStory) {
-        console.log('Create new story');
-        await this.$store.dispatch('chapter/createNewStory', {
+        const newStory = await this.$store.dispatch('chapter/createNewStory', {
           title: this.newTitle,
-          content: this.editor.getJSON(),
+          content: this.editor.getHTML(),
         });
+        this.$router.push({ name: 'story-id', params: { id: newStory.id } });
       } else {
         await this.$store.dispatch('chapter/saveChapter', {
           title: this.newTitle,
           choiceTitle: this.choiceTitle,
-          content: this.editor.getJSON(),
+          content: this.editor.getHTML(),
           parentChapter: this.parentChapter,
         });
       }
