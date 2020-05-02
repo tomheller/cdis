@@ -9,7 +9,7 @@ const startingPointsQuery = gql`
   query findEntryPoints {
     entrypoints(entryPoint: true) {
       data {
-        id
+        _id
         title
       }
     }

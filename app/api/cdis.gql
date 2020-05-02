@@ -1,5 +1,5 @@
 type Chapter @collection(name: "chapters") {
-  id: ID!
+  # id: ID!
   title: String!
   entryPoint: Boolean!
   author: Author! @relation
@@ -20,11 +20,11 @@ type Choice @embedded {
 }
 
 type Query {
-  allChapters: [Chapter!]! @index(name: "all_chapters")
-  allAuthors: [Author!]! @index(name: "all_authors")
+  # allChapters: [Chapter!]! @index(name: "all_chapters")
+  # allAuthors: [Author!]! @index(name: "all_authors")
   author(identity: String): Author
   entrypoints(entryPoint: Boolean): [Chapter!]
-  chapter(id: ID!): Chapter
+  # chapter(id: ID!): Chapter
 }
 
 type Mutation {

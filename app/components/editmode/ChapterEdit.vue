@@ -104,7 +104,7 @@ export default {
     ...mapState({
       parentChapter: (state) => state.chapter.currentlyAddingToChapter,
       isNewStory: (state) =>
-        state.chapter.currentlyAddingToChapter.id === undefined,
+        state.chapter.currentlyAddingToChapter._id === undefined,
     }),
   },
   mounted() {
@@ -127,7 +127,7 @@ export default {
           title: this.newTitle,
           content: this.editor.getHTML(),
         });
-        this.$router.push({ name: 'story-id', params: { id: newStory.id } });
+        this.$router.push({ name: 'story-id', params: { id: newStory._id } });
       } else {
         await this.$store.dispatch('chapter/saveChapter', {
           title: this.newTitle,

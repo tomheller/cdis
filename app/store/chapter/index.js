@@ -18,7 +18,7 @@ export const mutations = {
 
   updateChapter(state, chapterToUpdate) {
     const selectedChapterIndex = state.story.findIndex(
-      (ch) => ch.id === chapterToUpdate.id,
+      (ch) => ch._id === chapterToUpdate._id,
     );
     state.story[selectedChapterIndex] = chapterToUpdate;
     state.story = [...state.story];

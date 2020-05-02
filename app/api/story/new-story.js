@@ -19,7 +19,6 @@ app.post('/api/story/new-story', jwtCheck, async function(req, res) {
     mutation {
       createChapter(
         data: {
-          id: "${nanoid()}",
           title: "${title}",
           entryPoint: true,
           author: {
@@ -29,7 +28,7 @@ app.post('/api/story/new-story', jwtCheck, async function(req, res) {
           choices: []
         }
       ) {
-        id,
+        _id,
       },
     }
     `;

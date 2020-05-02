@@ -6,7 +6,7 @@
       <nuxt-link
         :to="{
           name: 'story-id',
-          params: { id: story.id },
+          params: { id: story._id },
         }"
         class="story-choose"
         >Choose this story</nuxt-link

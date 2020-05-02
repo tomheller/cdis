@@ -14,9 +14,8 @@ app.get('/api/story/get-by-id/:id', async function(req, res) {
   try {
     const getChapter = gql`
       query getChapterById{
-        chapter(id: "${id}") {
+        findChapterByID(id: "${id}") {
           _id
-          id
           title
           body
           author {
@@ -26,16 +25,17 @@ app.get('/api/story/get-by-id/:id', async function(req, res) {
           choices {
             title
             continuation {
-              id
+              _id
             }
           }
         }
       }
   `;
     const dbChapter = await client.query({ query: getChapter });
+    console.log(dbChapter);
     res
       .status(200)
-      .json(dbChapter.data.chapter)
+      .json(dbChapter.data.findChapterByID)
       .end();
   } catch (err) {
     console.log(err);

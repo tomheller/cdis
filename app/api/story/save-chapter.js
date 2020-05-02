@@ -19,7 +19,6 @@ app.post('/api/story/save-chapter', jwtCheck, async function(req, res) {
     mutation {
       createChapter(
         data: {
-          id: "${nanoid()}",
           title: "${title}",
           entryPoint: false,
           author: {
@@ -46,7 +45,6 @@ app.post('/api/story/save-chapter', jwtCheck, async function(req, res) {
       )
       {
         _id
-        id
         title
         author {
           name
@@ -57,7 +55,7 @@ app.post('/api/story/save-chapter', jwtCheck, async function(req, res) {
         choices {
           title,
           continuation {
-            id
+            _id
           }
         }
       }
