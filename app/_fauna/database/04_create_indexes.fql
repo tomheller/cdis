@@ -1,0 +1,57 @@
+Do(
+  // all chapter index
+  CreateIndex({
+    name: "all_chapters",
+    unique: false,
+    serialized: true,
+    source: Collection("chapters"),
+  }),
+  // author by identity index
+  CreateIndex({
+    name: "author",
+    unique: false,
+    serialized: true,
+    source: Collection("authors"),
+    terms: [
+      {
+        field: ["data", "identity"]
+      }
+    ]
+  }),
+  // Chapter by id index
+  CreateIndex({
+    name: "chapter",
+    unique: false,
+    serialized: true,
+    source: Collection("chapters"),
+    terms: [
+      {
+        field: ["data", "id"]
+      }
+    ]
+  }),
+  // Chapter by title index
+  CreateIndex({
+    name: "chapters_by_title",
+    unique: false,
+    serialized: true,
+    source: Collection("chapters"),
+    terms: [
+      {
+        field: ["data", "title"]
+      }
+    ]
+  }),
+  // Entrypoint index
+  CreateIndex({
+    name: "entrypoints",
+    unique: false,
+    serialized: true,
+    source: Collection("chapters"),
+    terms: [
+      {
+        field: ["data", "entryPoint"]
+      }
+    ]
+  })
+)

@@ -1,0 +1,51 @@
+CreateRole({
+  name: "CDIS-API",
+  privileges: [
+    {
+      resource: Collection("authors"),
+      actions: {
+        read: true,
+        write: true,
+        create: true,
+        delete: false,
+        history_read: false,
+        history_write: false,
+        unrestricted_read: false
+      }
+    },
+    {
+      resource: Collection("chapters"),
+      actions: {
+        read: true,
+        write: true,
+        create: true,
+        delete: false,
+        history_read: false,
+        history_write: false,
+        unrestricted_read: false
+      }
+    },
+    {
+      resource: Index("author"),
+      actions: {
+        unrestricted_read: false,
+        read: true
+      }
+    },
+    {
+      resource: Index("entrypoints"),
+      actions: {
+        unrestricted_read: false,
+        read: true
+      }
+    },
+    {
+      resource: Index("chapter"),
+      actions: {
+        unrestricted_read: false,
+        read: true
+      }
+    }
+  ],
+  membership: []
+})

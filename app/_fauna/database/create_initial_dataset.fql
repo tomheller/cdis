@@ -5,6 +5,24 @@ Do(
     Lambda(x => Delete(x))
   ),
 
+  // Delete all authors
+  Map(
+    Paginate(Documents(Collection('authors'))),
+    Lambda(x => Delete(x))
+  ),
+
+  // Create the initial author
+  Create(
+    Collection("authors"), {
+      data: {
+        name: "CDIS-author",
+        "image": "https://s.gravatar.com/avatar/3a0790dc2be4ec89125619572868dd5b?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fof.png",
+        "identity": "CDIS-author",
+        "email": "no-reply@example.com"
+      }
+    }
+  ),
+
   // Create initial set
   Map([
     ["This is the start of our story", true, "<p>Once upon a time, in a far away land there was a small little sloth. The sloth was slow, even for sloth-related speeds.</p><p>One day, the sloth encountered a tree.</p>"],
@@ -16,7 +34,7 @@ Do(
     Create(
       Collection("chapters"), {
         data: {
-          author: Ref(Collection("authors"), "264402646287254018"),
+          author: Select('ref', Get(Match(Index('author'), 'CDIS-author'))),
           body: Var("content"),
           entryPoint: Var("entrypoint"),
           title: Var("title"),

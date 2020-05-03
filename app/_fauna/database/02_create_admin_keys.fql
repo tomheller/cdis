@@ -1,0 +1,4 @@
+Map(
+  [Database("production"), Database("local")],
+  Lambda("db", CreateKey({ role: "admin", database: Var("db") }))
+)

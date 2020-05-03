@@ -1,0 +1,10 @@
+
+Map(
+  ["authors", "chapters"],
+  Lambda("name", CreateCollection({
+    name: Var("name"),
+    history_days: 30,
+    ttl_days: null
+  }))
+)
+

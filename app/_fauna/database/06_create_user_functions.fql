@@ -1,0 +1,47 @@
+Do (
+  // Create the function and update the role
+  CreateFunction({
+    name: "add_choice_to_chapter",
+    role: Role("CDIS-API"),
+    body: Query(
+      Lambda(
+        ["chapterId", "choiceTitle", "choiceContinuation"],
+        Update(Ref(Collection("chapters"), Var("chapterId")), {
+          data: {
+            choices: Append(
+              Select(
+                ["data", "choices"],
+                Get(Ref(Collection("chapters"), Var("chapterId"))),
+                []
+              ),
+              [
+                {
+                  title: Var("choiceTitle"),
+                  continuation: Ref(
+                    Collection("chapters"),
+                    Var("choiceContinuation")
+                  )
+                }
+              ]
+            )
+          }
+        })
+      )
+    )
+  }),
+  Update(
+    Role("CDIS-API"),
+    {
+      privileges:
+        Append(
+          Select("privileges", Get(Role("CDIS-API"))),
+          [{
+            resource: Function("add_choice_to_chapter"),
+            actions: {
+              call: true
+            }
+          }]
+        )
+    }
+  )
+)

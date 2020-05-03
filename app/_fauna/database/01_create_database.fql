@@ -1,0 +1,6 @@
+// Create the child databases
+Map(
+  [ "production", "local" ],
+  Lambda("name", CreateDatabase({ name: Var("name") })),
+)
+
