@@ -28,7 +28,7 @@ export const actions = {
 
   async startStory({ dispatch }, reference) {
     const startStoryChapterResponse = await this.$axios.get(
-      `/api/story/get-by-id/${reference}`,
+      `/api/story/get-by-id/?id=${reference}`,
     );
     const startStoryChapter = startStoryChapterResponse.data;
     await dispatch('chapter/resetStory', null, { root: true });

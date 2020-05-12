@@ -1,16 +1,15 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const gql = require('graphql-tag');
-const client = require('../util/apollo-fauna-client');
-
 const express = require('express');
+const client = require('../util/apollo-fauna-client');
 
 const app = express();
 app.use(express.json());
 
 // It is important that the full path is specified here
-app.get('/api/story/get-by-id/:id', async function(req, res) {
-  const id = req.params.id;
+app.get('/api/story/get-by-id/', async function(req, res) {
+  const id = req.query.id;
   try {
     const getChapter = gql`
       query getChapterById{

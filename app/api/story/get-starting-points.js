@@ -17,7 +17,7 @@ const startingPointsQuery = gql`
 `;
 
 // It is important that the full path is specified here
-app.get('/api/story/get-starting-points', async function(req, res) {
+app.get('/api/story/get-starting-points', async function(_req, res) {
   try {
     const startingPoints = await client.query({ query: startingPointsQuery });
     res

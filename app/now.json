@@ -19,23 +19,28 @@
   "routes": [
     {
       "src": "/api/story/get-by-id",
-      "dest": "/api/story/get-by-id.js"
+      "dest": "/api/story/get-by-id.js",
+      "methods": ["GET"]
     },
     {
       "src": "/api/story/get-starting-points",
-      "dest": "/api/story/get-starting-points.js"
+      "dest": "/api/story/get-starting-points.js",
+      "methods": ["GET"]
     },
     {
       "src": "/api/story/new-story",
-      "dest": "/api/story/new-story.js"
+      "dest": "/api/story/new-story.js",
+      "methods": ["POST"]
     },
     {
       "src": "/api/story/save-chapter",
-      "dest": "/api/story/save-chapter.js"
+      "dest": "/api/story/save-chapter.js",
+      "methods": ["POST"]
     },
     {
       "src": "/api/user/update-or-create",
-      "dest": "/api/user/update-or-create.js"
+      "dest": "/api/user/update-or-create.js",
+      "methods": ["POST"]
     }
   ]
 }

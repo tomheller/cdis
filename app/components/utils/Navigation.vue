@@ -1,8 +1,8 @@
 <template>
   <div class="header">
     <div class="nav">
-      <nuxt-link to="/">CDIS home</nuxt-link>
-      <nuxt-link to="/story">Story select</nuxt-link>
+      <nuxt-link to="/" class="nav-link">CDIS home</nuxt-link>
+      <nuxt-link to="/story" class="nav-link">Story select</nuxt-link>
     </div>
     <div class="auth">
       <img v-if="$auth.loggedIn" :src="$auth.user.picture" />
@@ -30,6 +30,10 @@ export default {
 
 .header {
   @apply flex justify-between;
+}
+
+.nav-link {
+  @apply text-blue-600 mx-4;
 }
 
 .auth {

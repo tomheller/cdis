@@ -1,6 +1,6 @@
 <template>
   <div class="editmode-card">
-    <p class="editmode-info" v-if="!isNewStory">
+    <p v-if="!isNewStory" class="editmode-info">
       Currently adding a path choice to
       <em>&ldquo;{{ parentChapter.title }}&rdquo;</em>
     </p>
@@ -92,10 +92,10 @@ export default {
   data() {
     return {
       editor: new Editor({
-        content: 'Hello',
+        content: '',
         extensions: [new Bold(), new Italic(), new History()],
       }),
-      newTitle: 'Hello bello',
+      newTitle: '',
       choiceTitle: '',
       saving: false,
     };
@@ -112,6 +112,7 @@ export default {
   },
   beforeDestroy() {
     this.editor.destroy();
+    this.$store.dispatch('chapter/cancelEditMode');
   },
   methods: {
     cancelEditMode() {

@@ -1,7 +1,9 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const isServerlessEnvironment = !!process.env.NOW_REGION;
+const isServerlessEnvironment = !!process.env.VERCEL_URL;
+
+console.log('Is Serverless', process.env.VERCEL_URL, process.env.BASE_URL);
 
 module.exports = {
   mode: 'spa',
@@ -59,7 +61,9 @@ module.exports = {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+  },
   auth: {
     redirect: {
       login: '/', // redirect user when not connected

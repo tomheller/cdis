@@ -1,10 +1,9 @@
 const dotenv = require('dotenv');
 const express = require('express');
-const nanoid = require('nanoid');
-const jwtCheck = require('../util/jwt-auth');
 const gql = require('graphql-tag');
-const client = require('../util/apollo-fauna-client');
 const sanitizeHtml = require('sanitize-html');
+const client = require('../util/apollo-fauna-client');
+const jwtCheck = require('../util/jwt-auth');
 
 dotenv.config();
 

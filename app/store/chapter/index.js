@@ -64,7 +64,7 @@ export const actions = {
     });
 
     const nextChapterResponse = await this.$axios.get(
-      `/api/story/get-by-id/${reference}`,
+      `/api/story/get-by-id/?id=${reference}`,
     );
     const nextChapter = nextChapterResponse.data;
     commit('addChapterToStory', nextChapter);

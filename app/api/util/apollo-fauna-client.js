@@ -9,7 +9,7 @@ const { InMemoryCache } = require('apollo-cache-inmemory');
 const client = new ApolloClient({
   link: new HttpLink({
     uri: process.env.FAUNADB_URL,
-    fetch: fetch,
+    fetch,
     headers: {
       authorization: `Bearer ${process.env.FAUNADB_KEY}`,
     },
