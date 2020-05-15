@@ -1,10 +1,5 @@
 <template>
   <div>
-    <svg class="connector" viewBox="0 0 40 100" width="10px">
-      <circle ref="upperConnector" cx="20" cy="20" r="15" />
-      <line ref="connectorLine" x1="20" y1="20" x2="20" y2="80" />
-      <circle ref="lowerConnector" cx="20" cy="80" r="15" />
-    </svg>
     <div ref="chaptercard" class="chapter">
       <h1 class="chapter-headline">{{ chapterData.title }}</h1>
       <article class="chapter-content" v-html="chapterData.body"></article>
