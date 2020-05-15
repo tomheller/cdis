@@ -1,45 +1,51 @@
 <template>
-  <div class="chapter">
-    <h1 class="chapter-headline">{{ chapterData.title }}</h1>
+  <div>
+    <svg class="connector" viewBox="0 0 40 100" width="10px">
+      <circle ref="upperConnector" cx="20" cy="20" r="15" />
+      <line ref="connectorLine" x1="20" y1="20" x2="20" y2="80" />
+      <circle ref="lowerConnector" cx="20" cy="80" r="15" />
+    </svg>
+    <div ref="chaptercard" class="chapter">
+      <h1 class="chapter-headline">{{ chapterData.title }}</h1>
+      <article class="chapter-content" v-html="chapterData.body"></article>
 
-    <article class="chapter-content" v-html="chapterData.body"></article>
-
-    <div class="chapter-choicecontainer">
-      <div v-if="chosenContinuationRef === undefined" key="choicelist">
-        <choice
-          v-for="choice in chapterData.choices"
-          :key="choice._id"
-          @selected="choose(choice, $event)"
-        >
-          {{ choice.title }}
-        </choice>
-        <choice
-          v-if="$auth.loggedIn"
-          :is-secondary-choice="true"
-          @selected="addNewPath"
-        >
-          Add a new path
-        </choice>
-      </div>
-      <transition
-        name="fade"
-        mode="in-out"
-        @enter="enter"
-        @after-enter="afterEnter"
-      >
-        <div v-if="chosenContinuationRef !== undefined">
+      <div class="chapter-choicecontainer">
+        <div v-if="chosenContinuationRef === undefined" key="choicelist">
           <choice
-            ref="chosenContinuation"
-            class="selected-choice"
-            :is-selected="true"
+            v-for="choice in chapterData.choices"
+            :key="choice._id"
+            @selected="choose(choice, $event)"
           >
-            {{ chosenContinuationTitle }}
+            {{ choice.title }}
+          </choice>
+          <choice
+            v-if="$auth.loggedIn"
+            :is-secondary-choice="true"
+            @selected="addNewPath"
+          >
+            Add a new path
           </choice>
         </div>
-      </transition>
-    </div>
-    <div v-if="chapterData.author" class="author">
-      <img :src="chapterData.author.image" :alt="chapterData.author.name" />
+        <transition
+          name="fade"
+          mode="in-out"
+          @enter="enter"
+          @after-enter="afterEnter"
+        >
+          <div v-if="chosenContinuationRef !== undefined">
+            <choice
+              ref="chosenContinuation"
+              class="selected-choice"
+              :is-selected="true"
+            >
+              {{ chosenContinuationTitle }}
+            </choice>
+          </div>
+        </transition>
+      </div>
+      <div v-if="chapterData.author" class="author">
+        <img :src="chapterData.author.image" :alt="chapterData.author.name" />
+      </div>
     </div>
   </div>
 </template>
@@ -112,6 +118,7 @@ export default {
       this.$store.dispatch('chapter/chooseContinuation', this.localChosenRef);
       this.localChosenRef = undefined;
     },
+
     addNewPath() {
       this.$store.dispatch('user/updateOrCreate', this.$auth.user).then(() => {
         this.$store.dispatch('chapter/addNewPath', this.chapterData);
